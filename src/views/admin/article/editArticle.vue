@@ -3,6 +3,7 @@
     <div class="header-wrap">
       编辑文章
       <div class="action-btn-wrap">
+        <span @click="sendCOS" v-if="canPublish">生成静态文件</span>
         <span @click="publish" v-if="canPublish">保存并发布</span>
         <span @click="modify" v-if="canModify">存为草稿</span>
         <span @click="save" v-if="canSave">存为草稿</span>
@@ -57,6 +58,12 @@
             tip="上传文章封面图"
             maxSize="2"
             @uploadSuccess="uploadSuccess"></UP>
+          <el-input
+            class="input-title"
+            size="mini"
+            v-model="article.url"
+            placeholder="请输入文章固定链接 如/article/article_title/">
+          </el-input>
           <el-input
             class="input-title"
             size="mini"
@@ -172,6 +179,7 @@ export default {
       'getCategoryList',
       'getTagList',
       'saveArticle',
+      'sendToCOS',
       'publishArticle',
       'modifyArticle'
     ]),
@@ -278,6 +286,7 @@ export default {
     getParams() {
       let html = this.markdownHtml(this.article.content)
       let params = {
+        url: this.article.url,
         title: this.article.title,
         cover: this.article.cover,
         sub_message: this.article.sub_message,
@@ -292,6 +301,33 @@ export default {
       }
       return params
     },
+    sendCOS(){
+      let params = this.getParams()
+      if (!params.title) {
+          this.$toast('文章标题不能为空', 'error')
+          return
+      }
+      if (!params.sub_message) {
+          this.$toast('文章简介不能为空', 'error')
+          return
+      }
+      if (!params.content) {
+          this.$toast('文章内容不能为空', 'error')
+          return
+      }
+      if (!params.url) {
+          this.$toast('文章固定链接不能为空', 'error')
+          return
+      }
+      this.sendToCOS(params)
+        .then((data) => {
+          this.$toast('已发送到服务器')
+          
+        })
+        .catch((err) => {
+          this.$toast(err.msg, 'error')
+        })
+    }, 
     publish() {
       let params = this.getParams()
       if (!params.title) {
@@ -306,6 +342,7 @@ export default {
           this.$toast('文章内容不能为空', 'error')
           return
       }
+     
       this.publishArticle(params)
         .then((data) => {
           this.$toast('已发布')

@@ -299,6 +299,18 @@ const actions = {
         return Promise.reject(error)
       })
   },
+    /**
+   * 发送文章到服务器
+   */
+  sendToCOS (store, params) {
+    return api.sendToCOS(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
   /**
    * 编辑文章
    */

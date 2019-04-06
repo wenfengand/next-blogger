@@ -89,6 +89,26 @@ axios.interceptors.response.use(function (response) {
   }
   return Promise.reject(error)
 })
+function getValueById(modelName, id, col){
+  return new Promise( (resolve, reject) => {
+    var query = new AV.Query(modelName)
+    query.get(id)
+    .then( (data) => {
+      resolve(data.get(col))
+    })
+  })
+ 
+}
+function getItemById(modelName, id){
+  return new Promise( (resolve, reject) => {
+    var query = new AV.Query(modelName)
+    query.get(id)
+    .then( (data) => {
+      resolve(data)
+    })
+  })
+ 
+}
 // get blogger full info 
 function bloginfo(resolve, reject){
   // 需要额外获取的info 
@@ -223,6 +243,15 @@ function commonArticleList(resolve1, reject1, params){
     resolve1( {list:page_list, total:total_count})
   }) 
 }
+function handleUrl(url){
+  if(url.charAt(0) != '/'){
+    url = '/' + url 
+  }
+  if(url.charAt(url.length - 1) != '/'){
+    url = url + '/'
+  }
+  return url 
+}
 // Save article 
 function articleSave(resolve, reject, params){
   // if article has id, update it; else make a new one
@@ -254,6 +283,11 @@ function articleSave(resolve, reject, params){
     article.set('status', params.status)
     article.set('isEncrypt', params.isEncrypt)
 
+    // handle wrong article url
+    if(params.url){
+      
+      article.set('url', handleUrl(params.url))
+    }
     // return old article
     // for a new article, old article == new article, except category and tags
     if(params.hasOwnProperty('id')){
@@ -674,6 +708,79 @@ export default {
     return new Promise( (resolve, reject) => {
       articleSave(resolve, reject, params)
       
+    })
+    
+  },
+   /**
+   * 发布文章
+   */
+  sendToCOS (params) {
+    
+    return new Promise( (resolve, reject) => {
+      var article = {}
+
+      article.articleId = params.id 
+      article.url = handleUrl(params.url)
+      article.title = params.title
+      article.sub_message =  params.sub_message
+      article.cover = params.cover
+      article.pageview = 0
+      article.publish_time =  "2019-04-03 00:08:05",
+      article.update_time  =  "2019-04-04 22:09:13",
+  
+      article.html_content = params.htmlContent
+      getValueById('Category', params.category.id, 'name')
+      .then( (name) => {
+        params.category.name = name
+
+        article.category = {
+            "url":"/list?type=category&id=" + params.category.id,
+            "name":params.category.name 
+        }
+        article.tags = []
+        var proArr = []
+        params.tags.forEach( (tag, i, a) => {
+        
+          proArr.push(Promise.resolve(getItemById('Tag', tag.id)))
+        
+        })
+        return Promise.all(proArr)
+      })
+      .then( (data) => {
+        data.forEach( (tag, i, a) => {
+          var pub_tag = {
+              "url":"/list?type=tag&id=" + tag.id,
+              "name":tag.get('name')
+          }
+          article.tags.push(pub_tag)
+        })
+         console.log(article) 
+
+        var query = new AV.Query('Secret')
+        query.equalTo('name', 'sendToCOSUrl')
+        return query.find()
+      })
+      .then( (data) => {
+        
+        if(data.length == 1){
+          data = data[0] 
+          var url = data.get('content')
+          console.log('url is', url) 
+          
+        }else{
+          console.log('url is') 
+          
+        }
+        resolve(axios({
+          method:"post",
+          url:url,
+          data:JSON.stringify(article),
+          headers:{
+              "content-type":"application/x-www-form-urlencoded; charset=utf-8"
+          }
+        }))
+      })
+     
     })
     
   },
