@@ -109,6 +109,19 @@ function getItemById(modelName, id){
   })
  
 }
+var formatDate = function (date) {  
+    var y = date.getFullYear();  
+    var m = date.getMonth() + 1;  
+    m = m < 10 ? ('0' + m) : m;  
+    var d = date.getDate();  
+    d = d < 10 ? ('0' + d) : d;  
+    var h = date.getHours();  
+    var minute = date.getMinutes();  
+    minute = minute < 10 ? ('0' + minute) : minute; 
+    var second= date.getSeconds();  
+    second = second < 10 ? ('0' + second) : second;  
+    return y + '-' + m + '-' + d+' '+h+':'+minute+':'+ second;  
+}
 // get blogger full info 
 function bloginfo(resolve, reject){
   // 需要额外获取的info 
@@ -730,8 +743,8 @@ export default {
       article.sub_message =  params.sub_message
       article.cover = params.cover
       article.pageview = 0
-      article.publish_time =  params.publish_time,
-      article.update_time  =  params.update_time,
+      article.publish_time =  formatDate(params.publish_time),
+      article.update_time  =  formatDate(params.update_time),
   
       article.html_content = params.htmlContent
       getValueById('Category', params.category.id, 'name')
