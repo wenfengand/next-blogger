@@ -14,7 +14,7 @@
       </div>
       <div class="article-info">
         <i class="iconfont icon-calendar"></i>
-        发表于 {{ article.publishTime | time('YYYY年MM月DD日') }} •
+        发表于 {{ article.publish_time | time('YYYY年MM月DD日') }} •
         <!-- 
         <i class="iconfont icon-folder"></i>
         <span class="classify" @click="toList('category', article.category.id)">{{ article.category.name }}</span> •

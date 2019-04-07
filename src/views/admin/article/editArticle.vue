@@ -292,7 +292,9 @@ export default {
         sub_message: this.article.sub_message,
         isEncrypt: this.isEncrypt ? '1' : '0',
         content: this.article.content,
-        htmlContent: html
+        htmlContent: html,
+        publish_time : this.article.publish_time,
+        update_time : this.article.update_time
       }
       params.category = this.getCategory()
       params.tags = this.getTags()

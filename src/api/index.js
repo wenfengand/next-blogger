@@ -283,6 +283,11 @@ function articleSave(resolve, reject, params){
     article.set('status', params.status)
     article.set('isEncrypt', params.isEncrypt)
 
+    if(params.status == '已发布'){
+      if(!params.publish_time){
+        article.set('publish_time', new Date())
+      }
+    }
     // handle wrong article url
     if(params.url){
       
@@ -725,8 +730,8 @@ export default {
       article.sub_message =  params.sub_message
       article.cover = params.cover
       article.pageview = 0
-      article.publish_time =  "2019-04-03 00:08:05",
-      article.update_time  =  "2019-04-04 22:09:13",
+      article.publish_time =  params.publish_time,
+      article.update_time  =  params.update_time,
   
       article.html_content = params.htmlContent
       getValueById('Category', params.category.id, 'name')
