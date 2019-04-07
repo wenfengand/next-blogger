@@ -19,6 +19,11 @@ yarn-error.log*
 
 # secret files 
 src/api/secret.js
+scripts/secret.py
 
 # test files 
 src/test
+
+# runtime files 
+*.pyc
+

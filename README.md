@@ -48,6 +48,8 @@
 - [x] 管理评论
 - [ ] 简历编辑
 - [ ] 修改管理员密码
+## 依赖
+1. 腾讯云COS python SDK `pip install cos-python-sdk-v5`
 
 ## LICENSE
 
