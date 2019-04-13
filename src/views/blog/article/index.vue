@@ -132,7 +132,7 @@ export default {
       }
     },
     toList (type, id) {
-      debugger;
+     
       this.$router.push({
         name: 'articleList',
         query: {

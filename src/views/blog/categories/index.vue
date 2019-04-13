@@ -97,6 +97,7 @@ export default {
       return 'rgba(38, 42, 48, ' + alpha + ')'
     },
     toList (type, id) {
+     
       this.$router.push({
         name: 'articleList',
         query: {

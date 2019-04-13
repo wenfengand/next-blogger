@@ -44,6 +44,9 @@ export default {
   },
   methods: {
     showArticle () {
+      
+     
+      
       this.$router.push({
         name: 'article',
         query: {

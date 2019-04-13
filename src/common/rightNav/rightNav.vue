@@ -198,6 +198,7 @@ export default {
       }
     },
     toView (to) {
+     
       this.$router.push({
         name: to
       })

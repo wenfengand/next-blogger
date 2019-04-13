@@ -14,6 +14,7 @@
         v-model="article.content"
         ref=md
         @imgAdd="$imgAdd"
+        @change="$change"
         :boxShadow="false"
         defaultOpen="edit"
         :toolbars="{
@@ -47,6 +48,7 @@
           subfield: true, // 单双栏模式
           preview: true, // 预览
         }"/>
+      
       <div class="input-wrap">
         <div class="fix-input-wrap">
           <UP class="upload-cover" 
@@ -121,6 +123,7 @@
               </el-option>
             </el-select>
           </div>
+          <div>字数统计:{{wordNum}}</div>
         </div>
       </div>
     </div>
@@ -160,7 +163,8 @@ export default {
       category: '',
       tags: [],
       categoryList: [],
-      tagList: []
+      tagList: [],
+      wordNum: 0
     }
   },
   created() {
@@ -169,7 +173,8 @@ export default {
   watch: {
     $route(route) {
       this.initData()
-    }
+    },
+   
   },
   methods: {
     ...mapActions([
@@ -184,6 +189,7 @@ export default {
       'modifyArticle'
     ]),
     initData() {
+      this.wordNum = 0
       let id = this.$route.query.id
       this.canPublish = false,
       this.canModify = false,
@@ -234,6 +240,9 @@ export default {
       oldTags.forEach(item => {
         this.tags.push(item.name)
       })
+    },
+    $change(value, render){
+      this.wordNum = this.getStrLength(value)
     },
     $imgAdd(pos, $file) {
       this.getQiniuToken(true)
@@ -398,6 +407,23 @@ export default {
           this.$toast(err.msg, 'error')
         })
     },
+    getStrLength(str) { 
+      var len = str.length; 
+      var reLen = 0; 
+      var cnChar = str.match(/[^\x00-\x80]/g)
+      return cnChar.length
+      /*
+      for (var i = 0; i < len; i++) {        
+          if (str.charCodeAt(i)  >= 0  || str.charCodeAt(i) <= 128) { 
+              // 全角    
+              reLen += 1; 
+          } else { 
+              reLen+=2; 
+          }
+      } 
+          return reLen;   
+      */ 
+      },
     updateRoute(name, articleId) {
       this.$router.push({
         name: name,

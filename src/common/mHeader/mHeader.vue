@@ -163,6 +163,7 @@ export default {
     ...mapActions([
     ]),
     toHomeFromLogo () {
+      
       window.location.href = `${window.location.origin}`
     },
     toggle () {
@@ -175,6 +176,7 @@ export default {
         return
       }
       this.toggle()
+      
       this.$router.push({name: tab.to})
     }
   }

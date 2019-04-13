@@ -82,6 +82,11 @@
     
     <% } else { %>
       <script>
+        
+        var _hmt = {'push':function(event, url){
+          console.log('No push to baidu', event, url)
+        }}
+
         // 百度统计
         window.baidu = ({from = (window.urlParams.ADTAG || '-'), type = 'page', event = '-'}) => {
           console.log('dev模式不上报百度统计：', from, type, event)
