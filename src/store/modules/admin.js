@@ -70,6 +70,7 @@ const actions = {
     cachedAdminInfo.delete()
     store.commit(IS_LOGIN, false)
     store.commit(SET_ADMIN_INFO, {})
+    api.adminSignOut()
   },
   /**
    * 获取七牛token

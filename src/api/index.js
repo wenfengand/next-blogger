@@ -472,6 +472,9 @@ export default {
 
     return AV.User.logIn(params.username, params.password)
   },
+  adminSignOut() {
+    AV.User.logOut()
+  },
   /**
    * 获取七牛token
    */
