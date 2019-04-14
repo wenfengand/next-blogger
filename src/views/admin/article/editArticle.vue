@@ -242,7 +242,9 @@ export default {
       })
     },
     $change(value, render){
+     
       this.wordNum = this.getStrLength(value)
+     
     },
     $imgAdd(pos, $file) {
       this.getQiniuToken(true)
@@ -411,7 +413,12 @@ export default {
       var len = str.length; 
       var reLen = 0; 
       var cnChar = str.match(/[^\x00-\x80]/g)
-      return cnChar.length
+      if(cnChar){
+        return cnChar.length
+      }else{
+        return 0
+      }
+      
       /*
       for (var i = 0; i < len; i++) {        
           if (str.charCodeAt(i)  >= 0  || str.charCodeAt(i) <= 128) { 
