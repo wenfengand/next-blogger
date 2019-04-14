@@ -44,15 +44,17 @@ export default {
   },
   methods: {
     showArticle () {
-      
-     
-      
-      this.$router.push({
+      if(this.article.static){
+        window.location.href = this.article.url 
+      }else{
+        this.$router.push({
         name: 'article',
         query: {
           id: this.article.id
         }
       })
+      }
+     
     },
     toList (type, id) {
       this.$router.push({

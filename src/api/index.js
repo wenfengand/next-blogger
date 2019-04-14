@@ -209,7 +209,7 @@ function commonArticleList(resolve1, reject1, params){
         }
         current_query = query
       
-        
+        query.descending('update_time')
         query.limit(params.pageSize);// 每页条数
         query.skip(params.page * params.pageSize);// 跳过页数
         return query.find()
@@ -223,6 +223,7 @@ function commonArticleList(resolve1, reject1, params){
         // query.equalTo('category', category_p)
        
         current_query =query
+        query.descending('update_time')
         query.limit(params.pageSize);// 每页条数
         query.skip(params.page  * params.pageSize);// 跳过页数
         return query.find()
@@ -239,6 +240,7 @@ function commonArticleList(resolve1, reject1, params){
         
 
         current_query = query
+        query.descending('update_time')
         query.limit(params.pageSize);// 每页条数
         query.skip(params.page  * params.pageSize);// 跳过页数
         byTag = true  
@@ -255,6 +257,7 @@ function commonArticleList(resolve1, reject1, params){
         }
        
         current_query = query
+        query.descending('update_time')
         query.limit(params.pageSize);// 每页条数
         query.skip(params.page * params.pageSize);// 跳过页数
         return query.find()
