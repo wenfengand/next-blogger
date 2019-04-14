@@ -89,6 +89,38 @@ axios.interceptors.response.use(function (response) {
   }
   return Promise.reject(error)
 })
+function getCommonArticle(resolve, reject, articleId){
+    var query = new AV.Query('Article')
+    query.include('category')
+    query.include('tags')
+    query.get(articleId)
+    .then( (data) => {
+     
+      data.attributes['id'] = data.id
+      var article = data.attributes 
+      var category = {}
+      category.id = data.get('category').id
+      category.name = data.get('category').get('name')
+      
+      var tags_org = data.get('tags')
+
+      var tags = []
+      // console.log('result[0] is ', results[0])
+      if(tags_org){
+        tags_org.forEach( (result, i, a) => {
+        result.attributes['id'] = result.id
+        tags = tags.concat( result.attributes )
+      })
+      }
+      
+      var ret_data = {}
+      ret_data.tags = tags 
+      ret_data.article = article 
+      ret_data.category = category
+
+      resolve(ret_data)
+    })
+}
 function getValueById(modelName, id, col){
   return new Promise( (resolve, reject) => {
     var query = new AV.Query(modelName)
@@ -198,21 +230,19 @@ function commonArticleList(resolve1, reject1, params){
         
       }
       else if( params.by == 'tag'){
-        // tag is a litte difficult
-        // 只有发布的文章才会被纳入 tagmap进行管理，否则此处对普通用户的查询会很困难
+       
         var tag_p = AV.Object.createWithoutData('Tag', params.tagId)
         var query = new AV.Query('Article')
-        var innerQuery = new AV.Query('TagMap')
+       
         
-        innerQuery.equalTo('tag_id', tag_p)
-        innerQuery.include('article_id')
-        innerQuery.include('article_id.category')
+        query.equalTo('tags', tag_p)
+        
 
-        current_query = innerQuery
-        innerQuery.limit(params.pageSize);// 每页条数
-        innerQuery.skip(params.page  * params.pageSize);// 跳过页数
+        current_query = query
+        query.limit(params.pageSize);// 每页条数
+        query.skip(params.page  * params.pageSize);// 跳过页数
         byTag = true  
-        return innerQuery.find()
+        return query.find()
        
       }
     }
@@ -234,15 +264,6 @@ function commonArticleList(resolve1, reject1, params){
   .then( (results) => {
     var article_list = []
     if(results){
-      if(byTag){
-        var tagMap = results 
-        results = []
-        tagMap.forEach( (tagmap, i, a) => {
-          if(tagmap.get('article_id')){
-             results =results.concat( tagmap.get('article_id'))
-          }   
-        })
-      }
       results.forEach((article, i, a) => {
       article.attributes['id'] = article.id 
       article.get('category').name = article.get('category').get('name')
@@ -270,6 +291,7 @@ function articleSave(resolve, reject, params){
   // if article has id, update it; else make a new one
   var old_article 
   var new_article
+  var new_tags_id
   var new_tags  
   var article 
   Promise.resolve()
@@ -306,10 +328,13 @@ function articleSave(resolve, reject, params){
       
       article.set('url', handleUrl(params.url))
     }
+    // set global new_article
+    new_article = article  
     // return old article
     // for a new article, old article == new article, except category and tags
     if(params.hasOwnProperty('id')){
-      var query = new AV.Query('Article');
+      var query = new AV.Query('Article')
+      query.include('tags')
       return  query.get(article.id)
        
     }else{
@@ -317,6 +342,7 @@ function articleSave(resolve, reject, params){
       // give fack class and fake tags
       var fake_cat = AV.Object.createWithoutData('Category', '123456')
       article.set('category', fake_cat)
+      article.set('tags', [])
       return Promise.resolve(article)
     }
     
@@ -360,12 +386,9 @@ function articleSave(resolve, reject, params){
       }
      
     }
-    // save article
+    
     article.set('category', category)
-    return article.save()
-  })
-  .then( (_new_article) => {
-    new_article = _new_article
+    // return article.save()
     // handle new tags
     var proArr = []
     params.tags.forEach( (tag, i, a) => {
@@ -385,66 +408,48 @@ function articleSave(resolve, reject, params){
     return Promise.all(proArr)
   })
   .then( (_new_tags) => {
-  new_tags = _new_tags  
-  // get tags
-  var article_p = new_article
-  var innerQuery = new AV.Query('TagMap')
-  innerQuery.equalTo('article_id', article_p)
-  return innerQuery.find()
-  })
-  .then( (results) => {
-    // change tags
-    
-    var old_tags_map = results 
-    var new_tags_id = []
-    
-    // some times we have tags, sometimes not
-    if(new_tags){
-      new_tags.forEach( (tag, i, a) => {
-      new_tags_id = new_tags_id.concat(tag.id)
-      })
-    }
-    
-     
-    var delete_tags_map = []
-
-    old_tags_map.forEach( (old_tag_map, i, a) => {
-      var tag_id = old_tag_map.get('tag_id').id
-      if( new_tags_id.contains(tag_id) ){
-        new_tags_id.removeByValue(tag_id)
-      }else{
-        delete_tags_map = delete_tags_map.concat( old_tag_map )
-      }
-      
+    // __new_tags is an array within dict or tag instance
+    // here we transfer tags to tags instance
+    new_tags = _new_tags  
+    var temp_tags = []
+    new_tags.forEach( (tag, i, a) => {
+      var tag = AV.Object.createWithoutData('Tag', tag.id) 
+      temp_tags.push(tag)
     })
-    console.log('new tags ', new_tags_id) 
-    console.log('delete tags', delete_tags_map)
-    if(params.status == '已发布'){
-      // save new tags map and increment count
-      new_tags_id.forEach( (tag, i, a) => {
-      var TagMap = AV.Object.extend('TagMap')
-      var map = new TagMap()
-      var tag_p = AV.Object.createWithoutData('Tag', tag)
-      var article_p = AV.Object.createWithoutData('Article', params.id)
-      map.set('article_id', article_p)
-      map.set('tag_id', tag_p)
-      map.save()
-      tag_p.increment('count', 1)
-      tag_p.save()
-      })
+    new_tags = temp_tags
 
-      // delete old tags map and decrement count
-      delete_tags_map.forEach( (tag_map, i, a) => {
-        var tag_p = AV.Object.createWithoutData('Tag', tag_map.get('tag_id').id)
-        tag_p.increment('count', -1)
-        tag_p.save()
-        tag_map.destroy()
-      })
-    }
+    var old_tags = old_article.get('tags')  
+    var delete_tags = []
     
+    new_article.set('tags', new_tags)
 
-    resolve(article)
-  })
+    
+    old_tags.forEach( (old_tag, i, a) => {
+      var new_tags_contain = false
+      new_tags.forEach( (new_tag, i, a) => {
+         if( new_tag.id == old_tag.id ) {
+            new_tags_contain = true 
+            new_tags.splice(i, 1)
+          }
+      })
+      if(new_tags_contain == false){
+        delete_tags.push( old_tag )
+      }
+    })
+
+    console.log('new tags ', new_tags) 
+    console.log('delete tags', delete_tags)
+    new_tags.forEach( (tag, i, a) => {
+      tag.increment('count', 1)
+      tag.save() 
+    })
+    // delete old tags map and decrement count
+    delete_tags.forEach( (tag, i, a) => {
+      tag.increment('count', -1)
+      tag.save()
+    })
+    resolve(new_article.save())
+   })
 }
 export default {
   isLogin (){
@@ -864,42 +869,7 @@ export default {
    */
   getArticle (articleId) {
     return new Promise( (resolve, reject) => {
-      var query = new AV.Query('Article')
-      query.include('category')
-      query.get(articleId)
-      .then( (data) => {
-        data.attributes['id'] = data.id
-        this.article = data.attributes 
-        this.category = {}
-        this.category.id = data.get('category').id
-        this.category.name = data.get('category').get('name')
-
-        var article_p = AV.Object.createWithoutData('Article', articleId)
-        var innerQuery = new AV.Query('TagMap')
-        innerQuery.equalTo('article_id', article_p)
-        innerQuery.include('tag_id')
-        return innerQuery.find()
-      })
-      .then( (results) => {
-      // console.log('inner query returns ', results)
-      var tags = []
-      // console.log('result[0] is ', results[0])
-      results.forEach( (result, i, a) => {
-        var tag = result.get('tag_id');
-        tag.attributes['id'] = tag.id
-        tags = tags.concat( tag.attributes )
-      } )
-      // console.log('tags are ', tags)
-      var ret_data = {}
-      ret_data.tags = tags 
-      ret_data.article = this.article 
-      ret_data.category = this.category 
-      // console.log('ret data is', ret_data)
-      resolve(ret_data)
-      })
-      .catch(function(error) {
-        alert(JSON.stringify(error));
-      })
+      getCommonArticle(resolve, reject, articleId)
     })
   },
   /**
@@ -1033,42 +1003,7 @@ export default {
    */
   getBlogArticle (articleId) {
     return new Promise( (resolve, reject) => {
-      var query = new AV.Query('Article')
-      query.include('category')
-      query.get(articleId)
-      .then( (data) => {
-        data.attributes['id'] = data.id
-        this.article = data.attributes 
-        this.category = {}
-        this.category.id = data.get('category').id
-        this.category.name = data.get('category').get('name')
-
-        var article_p = AV.Object.createWithoutData('Article', articleId)
-        var innerQuery = new AV.Query('TagMap')
-        innerQuery.equalTo('article_id', article_p)
-        innerQuery.include('tag_id')
-        return innerQuery.find()
-      })
-      .then( (results) => {
-      // console.log('inner query returns ', results)
-      var tags = []
-      // console.log('result[0] is ', results[0])
-      results.forEach( (result, i, a) => {
-        var tag = result.get('tag_id');
-        tag.attributes['id'] = tag.id
-        tags = tags.concat( tag.attributes )
-      } )
-      // console.log('tags are ', tags)
-      var ret_data = {}
-      ret_data.tags = tags 
-      ret_data.article = this.article 
-      ret_data.category = this.category 
-      console.log('ret data is', ret_data)
-      resolve(ret_data)
-      })
-      .catch(function(error) {
-        alert(JSON.stringify(error));
-      })
+      getCommonArticle(resolve, reject, articleId)
     })
     
   },

@@ -50,7 +50,8 @@
 - [ ] 修改管理员密码
 ## 依赖
 1. 腾讯云COS python SDK `pip install cos-python-sdk-v5`
-
+## 历史记录
+* 20190414 去除tag和article之间的中间表，影响到的api：获取article详细信息；保存article内容；
 ## LICENSE
 
 [MIT](https://opensource.org/licenses/MIT)
