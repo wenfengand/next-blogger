@@ -419,6 +419,10 @@ function articleSave(resolve, reject, params){
     new_tags = temp_tags
 
     var old_tags = old_article.get('tags')  
+    // Some article don't have tags column, set it with empty list
+    if(!old_tags){
+      old_tags = []
+    }
     var delete_tags = []
     
     new_article.set('tags', new_tags)
