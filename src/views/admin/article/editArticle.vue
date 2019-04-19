@@ -33,9 +33,9 @@
           imagelink: true, // 图片链接
           code: true, // code
           table: true, // 表格
-          fullscreen: false, // 全屏编辑
+          fullscreen: true, // 全屏编辑
           readmodel: true, // 沉浸式阅读
-          htmlcode: false, // 展示html源码
+          htmlcode: true, // 展示html源码
           help: true, // 帮助
           undo: true, // 上一步
           redo: true, // 下一步
@@ -244,7 +244,7 @@ export default {
     $change(value, render){
      
       this.wordNum = this.getStrLength(value)
-     
+      this.article.htmlContent = render 
     },
     $imgAdd(pos, $file) {
       this.getQiniuToken(true)
@@ -295,7 +295,7 @@ export default {
       return markdown(str)
     },
     getParams() {
-      let html = this.markdownHtml(this.article.content)
+      // let html = this.markdownHtml(this.article.content)
       let params = {
         url: this.article.url,
         title: this.article.title,
@@ -303,7 +303,7 @@ export default {
         sub_message: this.article.sub_message,
         isEncrypt: this.isEncrypt ? '1' : '0',
         content: this.article.content,
-        htmlContent: html,
+        htmlContent: this.article.htmlContent,
         publish_time : this.article.publish_time,
         update_time : this.article.update_time
       }

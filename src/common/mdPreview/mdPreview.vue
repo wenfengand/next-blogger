@@ -1,6 +1,7 @@
 <template>
   <div id="md-preview">
     <link href="//cdn.bootcss.com/github-markdown-css/2.4.1/github-markdown.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css" integrity="sha384-dbVIfZGuN1Yq7/1Ocstc1lUEm+AT+/rCkibIcC/OmWo5f0EA48Vf8CytHzGrSwbQ" crossorigin="anonymous">
     <section id="markdown-preview-body" class="preview markdown-body" v-html="contents" v-highlight>
     </section>
   </div>
