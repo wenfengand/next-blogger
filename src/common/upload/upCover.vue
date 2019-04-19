@@ -63,7 +63,7 @@ export default {
       default: '上传图片'
     },
     maxSize: { // 最大选择图片的大小，单位M
-      default: 3
+      default: 5
     }
   },
   data () {
@@ -73,7 +73,7 @@ export default {
       options: {
         aspectRatio: 1,
         preview: '#cropperRes',
-        zoomOnWheel: false,
+        zoomOnWheel: true,
         minCropBoxWidth: 50
       },
       token: {},

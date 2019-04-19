@@ -49,6 +49,7 @@ Array.prototype.contains = function (obj) {
     return false;  
 }  
 /* eslint-enable */
+/*
 axios.defaults.baseURL = (process.env.NODE_ENV === 'production' ? API_ROOT : API_ROOT_DEV)
 
 axios.defaults.headers.Accept = 'application/json'
@@ -89,6 +90,7 @@ axios.interceptors.response.use(function (response) {
   }
   return Promise.reject(error)
 })
+*/
 function getCommonArticle(resolve, reject, articleId){
     var query = new AV.Query('Article')
     query.include('category')
@@ -576,9 +578,11 @@ export default {
   /**
    * 获取首页面板显示的统计信息
    */
+  /*
   getHomeStatistics () {
     return axios.get('a/statistics/home')
   },
+  */
   /**
    * 获取系统日志
    
@@ -645,6 +649,7 @@ export default {
   getCategoryList (params) {
     return new Promise( (resolve, reject) => {
       var query = new AV.Query('Category')
+      query.limit(1000)
       query.find()
       .then( (results) => {
         var categories = []
@@ -668,6 +673,7 @@ export default {
   getTagList (params) {
     return new Promise( (resolve, reject) => {
       var query = new AV.Query('Tag')
+      query.limit(1000)
       query.find()
       .then( (results) => {
         var tags = []
@@ -772,6 +778,7 @@ export default {
         }
         article.tags = []
         var proArr = []
+        debugger;
         params.tags.forEach( (tag, i, a) => {
         
           proArr.push(Promise.resolve(getItemById('Tag', tag.id)))
@@ -932,14 +939,17 @@ export default {
   /**
    * 获取所有评论列表
    */
+  /*
   getAllCommentsList (params) {
     return axios.get('a/comments/alllist', {
       params: params
     })
   },
+  */
   /**
    * 获取文章评论列表
    */
+  /*
   getComments (articleId) {
     return axios.get('a/comments/list', {
       params: {
@@ -947,18 +957,22 @@ export default {
       }
     })
   },
+  */
   /**
    * 添加评论
    */
+  /*
   adminReplyComments (params) {
     return axios.post('a/comments/add', Qs.stringify(params))
-  },
+  },*/
   /**
    * 删除评论
    */
+  /*
   deleteComments (id) {
     return axios.post('a/comments/delete', Qs.stringify({commentsId: id}))
   },
+  */
   /**
    * 获取 我的简历 页面
    

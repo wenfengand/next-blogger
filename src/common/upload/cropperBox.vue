@@ -95,7 +95,7 @@ export default {
       if (!this.cropper) this.cropper = new Cropper(image, this.options)
       this.cropper.reset().replace(blobURL)
     },
-    finishCropImage () { // 完成裁剪，并输出裁剪结果，然后传到七牛
+    finishCropImage () { // 完成裁剪，并输出裁剪结果，然后上传
       this.uploading = true
 
       const croppedCanvas = this.cropper.getCroppedCanvas()

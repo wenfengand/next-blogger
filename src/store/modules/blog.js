@@ -55,7 +55,8 @@ const actions = {
    */
   getBlogArticleList (store, params) {
     return api.getBlogArticleList(params)
-      .then((data) => {
+      .then((data) => 
+      {
        
         // console.log('in blog.js we got', article_list)
         return Promise.resolve(data)
