@@ -410,26 +410,20 @@ export default {
         })
     },
     getStrLength(str) { 
-      var len = str.length; 
-      var reLen = 0; 
+      var len = 0; 
       var cnChar = str.match(/[^\x00-\x80]/g)
-      if(cnChar){
-        return cnChar.length
-      }else{
-        return 0
+      var enChar = str.match(/\b\w+\b/g)
+         
+          
+      if(cnChar){ 
+        len = len + cnChar.length
       }
       
-      /*
-      for (var i = 0; i < len; i++) {        
-          if (str.charCodeAt(i)  >= 0  || str.charCodeAt(i) <= 128) { 
-              // 全角    
-              reLen += 1; 
-          } else { 
-              reLen+=2; 
-          }
-      } 
-          return reLen;   
-      */ 
+      if(enChar){
+        len =  len + enChar.length
+      }
+      
+      return len
       },
     updateRoute(name, articleId) {
       this.$router.push({
