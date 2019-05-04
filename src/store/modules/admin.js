@@ -313,6 +313,19 @@ const actions = {
       })
   },
   /**
+  * 检查特定字段是否有重复值
+  * 
+   */
+  checkCount( store, params) {
+    return api.checkCount(params)
+    .then( (data) => {
+      return Promise.resolve(data)
+    })
+    .catch( (error) => {
+      return Promise.reject(error)
+    })
+  },
+  /**
    * 编辑文章
    */
   modifyArticle (store, params) {

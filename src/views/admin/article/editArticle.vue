@@ -63,7 +63,10 @@
           <el-input
             class="input-title"
             size="mini"
+            @input="checkUrl"
+            :suffix-icon="url_icon"
             v-model="article.url"
+            color=#F56C6C
             placeholder="请输入文章固定链接 如/article/article_title/">
           </el-input>
           <el-input
@@ -164,7 +167,8 @@ export default {
       tags: [],
       categoryList: [],
       tagList: [],
-      wordNum: 0
+      wordNum: 0,
+      url_icon:''
     }
   },
   created() {
@@ -186,6 +190,7 @@ export default {
       'saveArticle',
       'sendToCOS',
       'publishArticle',
+      'checkCount',
       'modifyArticle'
     ]),
     initData() {
@@ -195,6 +200,7 @@ export default {
       this.canModify = false,
       this.canSave = false,
       this.isEncrypt = false,
+      
       this.article = {
         content: '',
         title: '',
@@ -313,6 +319,29 @@ export default {
         params.id = this.article.id
       }
       return params
+    },
+    checkUrl(url_str){
+      let params = {
+        collection_name : 'Article',
+        field_name      : 'url',
+        target          :  url_str 
+      }
+      this.checkCount(params)
+      .then( (data) => {
+        debugger
+        if( data.count == 0){
+          this.url_icon = "el-icon-success"
+          
+        }
+        else{
+          this.url_icon = "el-icon-error" 
+          this.$message.error('固定链接重复，请重新输入');
+        }
+       
+      })
+      .catch((err) => {
+          this.$toast(err.msg, 'error')
+      })
     },
     sendCOS(){
       let params = this.getParams()

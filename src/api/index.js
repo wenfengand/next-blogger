@@ -91,6 +91,17 @@ axios.interceptors.response.use(function (response) {
   return Promise.reject(error)
 })
 */
+function _checkCount(collection_name, field_name, target){
+  return new Promise( (resolve, reject) => {
+    var query = new AV.Query(collection_name) 
+    query.equalTo(field_name, target)
+    query.count()
+    .then( (data) => {
+      resolve({count:data})
+    })
+  })
+  
+}
 function getCommonArticle(resolve, reject, articleId){
     var query = new AV.Query('Article')
     query.include('category')
@@ -731,6 +742,21 @@ export default {
         cat.updateTime = category.get('updatedAt')
         resolve(cat)
       })
+    })
+  },
+  /**
+  * check for duplicate url
+  *  检查url是否重复
+   */
+  checkCount( params ){
+    // return _checkCount(collection_name, field_name, target )
+    return new Promise( (resolve, reject) => {
+      var query = new AV.Query(params.collection_name) 
+      query.equalTo(params.field_name, params.target)
+      query.count()
+      .then( (data) => {
+        resolve({count:data})
+        })
     })
   },
   /**
