@@ -1,25 +1,25 @@
 import api from 'API/index'
 import {
-  SET_BLOG_INFO
+  SET_SITE_INFO
 } from '../mutation-types'
 
 import {
-  cachedBlogInfo
+  cachedSiteInfo
 } from 'API/cacheService'
 
 const state = {
-  blogInfo: cachedBlogInfo.load() || {}
+  siteInfo: cachedSiteInfo.load() || {}
 }
 
 const getters = {
-  blogInfo (state) {
-    return state.blogInfo
+  siteInfo (state) {
+    return state.siteInfo
   }
 }
 
 const mutations = {
-  [SET_BLOG_INFO] (state, data) {
-    state.blogInfo = data
+  [SET_SITE_INFO] (state, data) {
+    state.siteInfo = data
   }
 }
 
@@ -39,11 +39,11 @@ const actions = {
   /**
    * 获取博客信息
    */
-  getBlogInfo (store) {
-    return api.getBlogInfo()
+  getSiteInfo (store) {
+    return api.getSiteInfo()
       .then((data) => {
-        cachedBlogInfo.save(data)
-        store.commit(SET_BLOG_INFO, data)
+        cachedSiteInfo.save(data)
+        store.commit(SET_SITE_INFO, data)
         return Promise.resolve(data)
       })
       .catch((error) => {

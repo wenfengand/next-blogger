@@ -131,7 +131,7 @@ export default {
       'tokenError',
       'articleMenu',
       'articleMenuSource',
-      'blogInfo',
+      'siteInfo',
       'showRightNav',
       'screen'
     ])
@@ -139,15 +139,15 @@ export default {
   created() {
     if (!this.isAdminWrap) {
       
-      this.getBlogInfo()
+      this.getSiteInfo()
       .then( (data) => {
-        this.blogInfo = data
+        this.siteInfo = data
       })
       .catch(()=> {})
     }
   },
   mounted() {
-    document.title = `${this.blogInfo.blogName}`;
+    document.title = `${this.siteInfo.siteName}`;
     this.updateScreen()
     window.addEventListener('resize', this.updateScreen)
     window.addEventListener('scroll', this.scrollListener)
@@ -163,7 +163,7 @@ export default {
   methods: {
     ...mapActions([
       'setShowRightNav',
-      'getBlogInfo',
+      'getSiteInfo',
       'setArticleMenuTag'
     ]),
     setViewWrapWidth () {
@@ -227,11 +227,11 @@ export default {
     visibilityChange () {
       switch (document[this.getVisibilityState()]) {
         case 'visible':
-          document.title = `${this.blogInfo.blogName}`;
+          document.title = `${this.siteInfo.siteName}`;
           break
         case 'hidden':
         default:
-          document.title = `${this.blogInfo.blogName}`;
+          document.title = `${this.siteInfo.siteName}`;
           break
       }
     }

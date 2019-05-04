@@ -3,13 +3,13 @@
     <div class="footer-wrap">
      
       <p>
-        @{{ blogInfo.blogName || '博客' }} ———— {{ blogInfo.sign }}
+        @{{ siteInfo.siteName || '博客' }} ———— {{ siteInfo.sign }}
       </p>
       <p>
         本站点采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" target="_blank">知识共享 署名-非商业性使用-禁止演绎 4.0 国际 许可协议</a>
       </p>
       <p>
-        本站由 @{{ blogInfo.blogName || '博客' }} 创建 - © 2019
+        本站由 @{{ siteInfo.siteName || '博客' }} 创建 - © 2019
       </p>
     </div>
   </div>
@@ -31,7 +31,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'blogInfo'
+      'siteInfo'
     ])
   },
   created () {

@@ -167,8 +167,11 @@ var formatDate = function (date) {
     second = second < 10 ? ('0' + second) : second;  
     return y + '-' + m + '-' + d+' '+h+':'+minute+':'+ second;  
 }
+function authorinfo(){
+
+}
 // get blogger full info 
-function bloginfo(resolve, reject){
+function siteinfo(resolve, reject){
   // 需要额外获取的info 
   // blogInfo.articleCount blogInfo.categoryCount  blogInfo.tagCount 
   //
@@ -568,7 +571,7 @@ export default {
     /* params contains:
     alipayQrcode: "http://lc.stackoverflow.club/97d018f9763d2ff11e1e.jpg"
     avatar: "http://lc.stackoverflow.club/78eedb78fa559f6cf206.jpg"
-    blogName: (...)
+    siteName: (...)
     github: (...)
     sign: (...)
     wxpayQrcode:
@@ -584,8 +587,8 @@ export default {
     if(params.avatar){
       config.set('avatar', params.avatar)
     }
-    if(params.blogName){
-      config.set('blogName', params.blogName)
+    if(params.siteName){
+      config.set('siteName', params.siteName)
     }
     if(params.github){
       config.set('github', params.github)
@@ -1051,9 +1054,9 @@ export default {
   /**
    * 获取博客信息
    */
-  getBlogInfo () {
+  getSiteInfo () {
     return new Promise( (resolve, reject) => {
-      bloginfo(resolve, reject)
+      siteinfo(resolve, reject)
     })
     
   },

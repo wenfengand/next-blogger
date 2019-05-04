@@ -18,25 +18,27 @@
         </transition>
         <transition name="slide-fade">
           <div class="info-wrap" v-show="!showMenu">
-            <img class="avatar" :src="blogInfo.avatar || defaultAvatar"/>
-            <p class="name">{{ blogInfo.blogName }}</p>
-            <p class="motto">{{ blogInfo.sign }}</p>
+            <img class="avatar" :src="authorInfo.avatar || defaultAvatar"/>
+            <p class="name">{{ authorInfo.name }}</p>
+            <p class="motto">{{ authorInfo.sign }}</p>
             <div class="menu-wrap">
               <span class="menu-item" @click="toView('home')">
-                <p class="count">{{ blogInfo.articleCount || 0 }}</p>
+                <p class="count">{{ authorInfo.articleCount || 0 }}</p>
                 <p>文章</p>
               </span>
+              <!--
               <span class="menu-item" @click="toView('categories')">
-                <p class="count">{{ blogInfo.categoryCount || 0 }}</p>
+                <p class="count">{{ authorInfo.categoryCount || 0 }}</p>
                 <p>分类</p>
               </span>
               <span class="menu-item" @click="toView('categories')">
-                <p class="count">{{ blogInfo.tagCount || 0 }}</p>
+                <p class="count">{{ authorInfo.tagCount || 0 }}</p>
                 <p>标签</p>
               </span>
+              -->
             </div>
             <div class="social-wrap">
-              <a class="social-item" :href="blogInfo.github" target="_blank" v-if="blogInfo.github">
+              <a class="social-item" :href="authorInfo.github" target="_blank" v-if="authorInfo.github">
                 <i class="iconfont icon-github"></i>
                 github
               </a>
@@ -175,7 +177,7 @@ export default {
     ...mapGetters([
       'screen',
       'showRightNav',
-      'blogInfo',
+      'authorInfo',
       'articleMenu'
     ])
   },

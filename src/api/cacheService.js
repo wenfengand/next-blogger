@@ -9,7 +9,7 @@ const ssCache = new Cache({storage: 'sessionStorage'})
 const KEYS = {
   token: 'ak',
   adminInfo: 'adminInfo',
-  blogInfo: 'blogInfo',
+  siteInfo: 'siteInfo',
   commentsInfo: 'commentsInfo'
 }
 
@@ -63,5 +63,5 @@ export function removeAccessToken () {
 }
 
 export const cachedAdminInfo = new CommonStorage(KEYS.adminInfo, 0)
-export const cachedBlogInfo = new CommonStorage(KEYS.blogInfo, 0)
+export const cachedSiteInfo = new CommonStorage(KEYS.siteInfo, 0)
 export const cachedCommentsInfo = new CommonStorage(KEYS.commentsInfo, 0)

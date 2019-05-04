@@ -7,7 +7,7 @@
         'padding': isPc ? '25px' : '0px'
         }">
         <p class="line" v-if="isPc"></p>
-        <p class="blog-name">{{ blogInfo.blogName || '博客' }}</p>
+        <p class="blog-name">{{ siteInfo.siteName  }}</p>
         <p class="line" v-if="isPc"></p>
       </div>
       
@@ -240,7 +240,7 @@ export default {
   computed: {
     ...mapGetters([
       'screen',
-      'blogInfo'
+      'siteInfo'
     ])
   },
   methods: {
