@@ -68,12 +68,19 @@ export default {
       this.$photoPreview.open(e.target.indexTag, this.imgList)
     },
     getMenu() {
-      let headNodes = document.getElementById('markdown-preview-body').getElementsByClassName('my-blog-head')
+      // let headNodes = document.getElementById('markdown-preview-body').getElementsByClassName('my-blog-head')
+      let all = document.getElementById('markdown-preview-body').children 
+      let headNodes = []
+      for(let i=0;i<all.length;i++){
+        if(all[i].tagName[0] == 'H'){
+          headNodes.push(all[i])
+        }
+      }
       let headList = []
       let pos = 0
       Array.prototype.forEach.call(headNodes, item => {
         headList.push({
-          id: item.id,
+          id: item.children[0].id,
           index: parseInt(item.tagName.replace('H', '')),
           title: item.innerText
         })

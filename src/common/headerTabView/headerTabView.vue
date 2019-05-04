@@ -61,7 +61,7 @@ export default {
   font-size: 14px
   cursor: default
   animation: show .5s
-  .tab
+  .ddd
     padding: 5px 8px
     display: inline-block
     cursor: pointer

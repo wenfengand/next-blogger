@@ -10,7 +10,7 @@
       <div class="menu-info-head" v-if="articleMenu">
         <span :class="{'active': showMenu}" @click="showMenu = true">文章目录</span>
         |
-        <span :class="{'active': !showMenu}" @click="showMenu = false">站点信息</span>
+        <span :class="{'active': !showMenu}" @click="showMenu = false">作者信息</span>
       </div>
       <div class="content-wrap">
         <transition name="slide-fade">
@@ -19,8 +19,8 @@
         <transition name="slide-fade">
           <div class="info-wrap" v-show="!showMenu">
             <img class="avatar" :src="blogInfo.avatar || defaultAvatar"/>
-            <p class="name">{{ blogInfo.blogName || '博客' }}</p>
-            <p class="motto">{{ blogInfo.sign || '-' }}</p>
+            <p class="name">{{ blogInfo.blogName }}</p>
+            <p class="motto">{{ blogInfo.sign }}</p>
             <div class="menu-wrap">
               <span class="menu-item" @click="toView('home')">
                 <p class="count">{{ blogInfo.articleCount || 0 }}</p>
@@ -159,11 +159,11 @@ export default {
     },
     articleMenu (value) {
       if (value) {
-        this.showMenu = true
+        this.showMenu = true  
         this.setShowRightNav(true)
         this.toggleLineData = this.lineStyle.closeLineData
       } else {
-        this.showMenu = false
+        this.showMenu = false 
         this.setShowRightNav(false)
         this.toggleLineData = this.lineStyle.normalLineData
       }

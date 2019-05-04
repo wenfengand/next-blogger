@@ -33,7 +33,7 @@
           imagelink: true, // 图片链接
           code: true, // code
           table: true, // 表格
-          fullscreen: true, // 全屏编辑
+          // fullscreen: true, // 全屏编辑
           readmodel: true, // 沉浸式阅读
           htmlcode: true, // 展示html源码
           help: true, // 帮助
@@ -41,7 +41,7 @@
           redo: true, // 下一步
           trash: true, // 清空
           save: false, // 保存（触发events中的save事件）
-          navigation: false, // 导航目录
+          navigation: true, // 导航目录
           alignleft: false, // 左对齐
           aligncenter: false, // 居中
           alignright: false, // 右对齐

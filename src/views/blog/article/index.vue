@@ -13,7 +13,7 @@
           <i class="iconfont icon-eye"></i>
           {{ article.pageview }}次围观
         </div>
-        <div class="article-sub-message">{{ article.subMessage }}</div>
+        <div class="article-sub-message">{{ article.sub_message }}</div>
       </div>
       <md-preview :contents="article.html_content" />
       <div class="money-wrap" v-if="qrcode">
