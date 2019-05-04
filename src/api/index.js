@@ -811,6 +811,10 @@ export default {
           console.log('url is') 
           
         }
+        // set static to true 
+        save_article = AV.Object.createWithoutData('Article', params.id)
+        save_article.set('static', true)
+        save_article.save()
         resolve(axios({
           method:"post",
           url:url,
