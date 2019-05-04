@@ -22,7 +22,7 @@
             <p class="name">{{ authorInfo.name }}</p>
             <p class="motto">{{ authorInfo.sign }}</p>
             <div class="menu-wrap">
-              <span class="menu-item" @click="toView('home')">
+              <span class="menu-item" >
                 <p class="count">{{ authorInfo.articleCount || 0 }}</p>
                 <p>文章</p>
               </span>

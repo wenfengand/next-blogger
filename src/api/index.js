@@ -106,6 +106,7 @@ function getCommonArticle(resolve, reject, articleId){
     var query = new AV.Query('Article')
     query.include('category')
     query.include('tags')
+    query.include('author')
     query.get(articleId)
     .then( (data) => {
      
@@ -125,11 +126,15 @@ function getCommonArticle(resolve, reject, articleId){
         tags = tags.concat( result.attributes )
       })
       }
+      var author = data.get('author').attributes
+      author.id = data.get('author').id 
+      
       
       var ret_data = {}
       ret_data.tags = tags 
       ret_data.article = article 
       ret_data.category = category
+      ret_data.author   = author 
 
       resolve(ret_data)
     })

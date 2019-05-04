@@ -1,6 +1,7 @@
 import api from 'API/index'
 import {
-  SET_SITE_INFO
+  SET_SITE_INFO,
+  SET_AUTHOR_INFO
 } from '../mutation-types'
 
 import {
@@ -8,18 +9,25 @@ import {
 } from 'API/cacheService'
 
 const state = {
-  siteInfo: cachedSiteInfo.load() || {}
+  siteInfo: cachedSiteInfo.load() || {},
+  authorInfo : {}
 }
 
 const getters = {
   siteInfo (state) {
     return state.siteInfo
+  },
+  authorInfo(state){
+    return state.authorInfo 
   }
 }
 
 const mutations = {
   [SET_SITE_INFO] (state, data) {
     state.siteInfo = data
+  },
+  [SET_AUTHOR_INFO] (state, data) {
+    state.authorInfo = data
   }
 }
 
@@ -83,6 +91,7 @@ const actions = {
   getBlogArticle (store, articleId) {
     return api.getBlogArticle(articleId)
       .then((data) => {
+        store.commit(SET_AUTHOR_INFO, data.author)
         return Promise.resolve(data)
       })
       .catch((error) => {

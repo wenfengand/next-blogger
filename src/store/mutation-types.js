@@ -12,8 +12,10 @@ export const IS_LOGIN = 'IS_LOGIN'
 export const SHOW_TOKEN_ERROR = 'SHOW_TOKEN_ERROR'
 // 保存管理员信息
 export const SET_ADMIN_INFO = 'SET_ADMIN_INFO'
-// 保存博客信息
+// 保存站点信息
 export const SET_SITE_INFO = 'SET_BLOG_INFO'
+// 保存作者信息
+export const SET_AUTHOR_INFO = 'SET_AUTHOR_INFO'
 // 保存文章目录信息
 export const SET_ARTICLE_MENU = 'SET_ARTICLE_MENU'
 // 保存文章目录信息(未生成树的)
