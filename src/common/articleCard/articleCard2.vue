@@ -15,6 +15,7 @@
         {{ article.pageview }}次围观
       </div>
       <div class="article-sub-message">{{ article.sub_message }}</div>
+      <el-button @click='edit' v-if='isLogin'>修改</el-button>
       <!--
       <div class="tags">
         <div
@@ -32,7 +33,11 @@
 </template>
 
 <script>
-
+import {
+  mapActions,
+  mapGetters,
+  mapMutations
+} from 'vuex'
 export default {
   name: 'article-card',
   props: ['article'],
@@ -41,8 +46,18 @@ export default {
     }
   },
   computed: {
+    ...mapGetters([
+      'isLogin'])
   },
   methods: {
+    edit(){
+      this.$router.push({
+        name: 'editArticle',
+        query: {
+          id:this.article.id 
+        }
+      })
+    },
     showArticle () {
       if(this.article.static){
         window.location.href = this.article.url 
