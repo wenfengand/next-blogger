@@ -58,7 +58,8 @@ export default {
       pageSize: 10,
       currentPage: 0,
       total: 0,
-      loading: false
+      loading: false,
+      searchValue: ''
     }
   },
   created() {

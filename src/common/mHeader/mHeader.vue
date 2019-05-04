@@ -10,7 +10,9 @@
         <p class="blog-name">{{ blogInfo.blogName || '博客' }}</p>
         <p class="line" v-if="isPc"></p>
       </div>
+      
       <header-tab-view v-if="isPc" :tabs="tabs" @tab-click="selectTab" />
+    
       <div class="toggle" v-if="!isPc" @click="toggle">
         <span
           class="toggle-line"
@@ -26,6 +28,7 @@
         </span>
       </div>
     </div>
+    
     <el-collapse-transition>
       <div class="mobile-tab-wrap" v-show="!isPc&&showMobileTabs">
         <div class="tab" v-for="(tab, index) in tabs" :key="index" @click="selectTab(tab)">
@@ -34,6 +37,7 @@
         </div>
       </div>
     </el-collapse-transition>
+    
   </div>
 </template>
 
@@ -56,15 +60,95 @@ export default {
       isPc: true,
       tabs: [
         {
+          id : '1',
           name: '首页',
           icon: 'icon-home',
-          to: 'home'
+          router: 'home'
         },
         {
+          id : '2',
           name: '分类/标签',
           icon: 'icon-tag',
-          to: 'categories'
+          router: 'categories'
         },
+        {
+          id : '3',
+          name: '前端',
+          icon: 'icon-tag',
+          items: [
+            {
+              id   : '5ca8aa44c05a800073bde20e',
+              name : 'html',
+              router   : 'articleList',
+              type : 'category'
+            },
+            {
+              id   : '5ccd8875d5de2b0074fac5bd',
+              name : 'css',
+              type  : 'category',
+              router   : 'articleList',
+            },
+            {
+              id   : '5ccd896e17b54d0068cd2bd8',
+              name : 'javascript',
+              type : 'category',
+              router   : 'articleList'
+            }, 
+            {
+              id   : '5ca89494a3180b0068f01210',
+              name : 'Vue',
+              type : 'category',
+              router   : 'articleList'
+            },
+          ]
+        },
+        {
+          id  : '4',
+          name: '后端',
+          icon: 'icon-tag',
+          items: [
+            {
+              id   : '5ccd899dba39c80070d756e0',
+              name : 'mysql',
+              type : 'category',
+              router   : 'articleList'
+            },
+            {
+              id   : '5ccd89b00237d7006f27253e',
+              name : 'apache',
+              type : 'category',
+              router   : 'articleList'
+            },
+            {
+              id   : '5ccd89d30237d7006f2726cd',
+              name : 'nginx',
+              type : 'category',
+              router   : 'articleList'
+            }
+          ]
+        },
+        
+        {
+          id  : '5',
+          name: '机器学习',
+          icon: 'icon-tag',
+          items:[
+            {
+              id   : '5ca8aa6c0237d70068d88688',
+              name : '机器学习',
+              type : 'category',
+              router: 'articleList'
+            },
+            {
+              id   : '5ccd89f4d3761600694e6a69',
+              name : '深度学习',
+              type : 'category',
+              router: 'articleList'
+            },
+          ]
+          
+        },
+        
         /*
         {
           name: '归档',
@@ -171,13 +255,21 @@ export default {
       this.toggleLineData = this.showMobileTabs ? this.lineStyle.closeLineData : this.lineStyle.normalLineData
     },
     selectTab (tab) {
-      if (tab.to === 'morefunc') {
+      if (tab.router === 'morefunc') {
         this.$toast('更多功能待开发...')
         return
       }
       this.toggle()
-      
-      this.$router.push({name: tab.to})
+      let route_str = {}
+      route_str.name = tab.router 
+
+      if(tab.type){
+        route_str.query = {}
+        route_str.query.type = tab.type 
+        route_str.query.id   = tab.id 
+      }
+     
+      this.$router.push(route_str)
     }
   }
 }

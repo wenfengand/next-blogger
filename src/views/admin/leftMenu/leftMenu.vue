@@ -34,9 +34,9 @@
       <el-submenu index="4">
         <template slot="title">
           <i class="iconfont icon-config"></i>
-          <span slot="title">配置</span>
+          <span slot="title">通用</span>
         </template>
-        <el-menu-item index="/admin/webConfig"><i class="iconfont icon-base-config"></i>基本配置</el-menu-item>
+        <el-menu-item index="/admin/webConfig"><i class="iconfont icon-base-config"></i>个人资料</el-menu-item>
         <!--
         <el-menu-item index="/admin/webConfig/about"><i class="iconfont icon-about"></i>关于我</el-menu-item>
         <el-menu-item index="/admin/webConfig/resume"><i class="iconfont icon-resume"></i>我的简历</el-menu-item>

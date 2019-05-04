@@ -1,7 +1,7 @@
 <template>
   <div id="web-config">
     <div class="header-wrap">
-      网站基本信息配置
+      个人资料
       <div class="action-btn-wrap">
         <span @click="commit">提交</span>
       </div>

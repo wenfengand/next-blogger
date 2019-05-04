@@ -1,9 +1,39 @@
 <template>
   <div id="header-tab-view">
+    <el-menu  mode="horizontal" 
+              background-color=#f9f9f9>
+      
+        <el-menu-item class="menu" 
+                      v-for="(tab, index) in tabs"
+                      :index="tab.id" 
+                      v-bind:key="tab.id"
+                      v-if="!tab.hasOwnProperty('items')"
+                      @click="selectTab(tab)">
+                {{ tab.name }}
+        </el-menu-item>
+        <el-submenu  class="menu" 
+                    v-for="(tab, index) in tabs"
+                    v-bind:key="tab.id"
+                    :index="tab.id"
+                    v-if="tab.hasOwnProperty('items')">
+            <template slot="title">{{ tab.name }}</template>
+            <el-menu-item  v-for="(sub_tab, sub_index) in tab.items"
+                           v-bind:key="sub_tab.id"
+                           :index="sub_tab.id"
+                           @click="selectTab(sub_tab)"> 
+                           {{sub_tab.name}} 
+            </el-menu-item>
+        </el-submenu>
+   
+    </el-menu>
+     
+    <!--
+    It's old code. 
     <div class="tab" v-for="(tab, index) in tabs" :key="index" @click="selectTab(tab)">
       <i class="iconfont" :class="tab.icon"></i>
       <span>{{ tab.name }}</span>
     </div>
+    -->
   </div>
 </template>
 
@@ -13,7 +43,7 @@ export default {
   props: ['tabs'],
   data () {
     return {
-
+      
     }
   },
   methods: {
