@@ -1,5 +1,14 @@
 <template>
   <div id="home" v-loading="loading">
+    <div class="search-input-wrap">
+      <input 
+        v-model="searchValue"
+        @keyup.enter="toSearch()"
+        type="search"
+        placeholder="输入关键字搜索..."
+        id="search-input"
+        class="search-real-input">
+    </div>
     <article-card2
       v-for="(article, index) in articleList"
       :key="index"
@@ -58,7 +67,8 @@ export default {
   },
   methods: {
     ...mapActions([
-      'getBlogArticleList'
+      'getBlogArticleList',
+      'searchArticle'
     ]),
     pageChange(currentPage) {
       this.scrollToTarget(0, false)
@@ -73,7 +83,7 @@ export default {
           pageSize: this.pageSize
         })
         .then( (data) => {
-        
+          
           this.total = data.total
           
           this.articleList = data.list
@@ -83,6 +93,31 @@ export default {
           this.articleList = []
           this.loading = false
         })
+    },
+    toSearch(){
+      if (this.searchValue === '') {
+        this.$toast('搜索内容不能为空', 'error')
+        return
+      }
+      else {
+
+        this.loading = true
+        this.searchArticle({
+            searchValue: this.searchValue,
+            page: this.page,
+            pageSize: this.pageSize
+          })
+          .then((data) => {
+        
+            this.total = data.total
+            this.articleList = data.list
+            this.loading = false
+          })
+          .catch(()=> {
+            this.articleList = []
+            this.loading = false
+          })
+      }
     }
   }
 }
@@ -94,6 +129,24 @@ export default {
   position: relative
   padding: 30px 10px
   min-height: 100px
+  .search-input-wrap
+    width: 100%
+    max-width: 300px
+    height: 30px
+    border-radius: 5px
+    border: 1px solid #eeeeee
+    margin-bottom: 10px 
+
+    .search-real-input
+      width: 100%
+      height: 28px
+      padding: 5px 10px
+      border-radius: 5px
+      border: none
+      font-size: 14px
+      background-color: $color-white
+      &::placeholder
+        color: $text-tip
   .pagination
     width: 100%
     padding: 10px 0

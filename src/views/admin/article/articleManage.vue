@@ -2,6 +2,15 @@
   <div id="article-manage">
     <p>已发布（共计：{{ total }}篇）</p>
     <div class="article-table-wrap">
+      <div class="search-input-wrap">
+        <input 
+          v-model="searchValue"
+          @keyup.enter="toSearch()"
+          type="search"
+          placeholder="输入关键字搜索..."
+          id="search-input"
+          class="search-real-input">
+      </div>
       <el-table
         :data="articleList"
         border
@@ -143,7 +152,8 @@ export default {
   methods: {
     ...mapActions([
       'getArticleList',
-      'deleteArticle'
+      'deleteArticle',
+      'searchArticle'
     ]),
     formatTime(row, column, cellValue, index) {
       return cellValue ? moment(cellValue).format('YYYY-MM-DD HH:mm') : '-'
@@ -213,6 +223,31 @@ export default {
         }).then(() => {
           next()
         }).catch(()=>{})
+    },
+    toSearch(){
+        if (this.searchValue === '') {
+          this.$toast('搜索内容不能为空', 'error')
+          return
+        }
+        else {
+
+          this.loading = true
+          this.searchArticle({
+              searchValue: this.searchValue,
+              page: this.page,
+              pageSize: this.pageSize
+            })
+            .then((data) => {
+          
+              this.total = data.total
+              this.articleList = data.list
+              this.loading = false
+            })
+            .catch(()=> {
+              this.articleList = []
+              this.loading = false
+            })
+        }
     }
   }
 }
@@ -233,6 +268,25 @@ export default {
     background-color: $color-white
     box-shadow: 1px 1px 10px 1px rgba(38, 42, 48, .1)
     z-index: 1000
+  .search-input-wrap
+    width: 100%
+    max-width: 300px
+    height: 30px
+    border-radius: 5px
+    border: 1px solid #eeeeee
+    margin-bottom: 10px 
+    margin-top: 10px
+    
+    .search-real-input
+      width: 100%
+      height: 28px
+      padding: 5px 10px
+      border-radius: 5px
+      border: none
+      font-size: 14px
+      background-color: $color-white
+      &::placeholder
+        color: $text-tip
   .article-table-wrap
     width: 100%
     animation: show .8s

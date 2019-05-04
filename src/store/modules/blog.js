@@ -30,7 +30,7 @@ const actions = {
   getBlogAboutMe (store) {
     return api.getBlogAboutMe()
       .then((data) => {
-        return Promise.resolve(data.data)
+        return Promise.resolve(data)
       })
       .catch((error) => {
         return Promise.reject(error)
@@ -71,7 +71,7 @@ const actions = {
   getBlogArticleArchives (store, params) {
     return api.getBlogArticleArchives(params)
       .then((data) => {
-        return Promise.resolve(data.data)
+        return Promise.resolve(data)
       })
       .catch((error) => {
         return Promise.reject(error)
@@ -121,7 +121,7 @@ const actions = {
   getBlogFriendsList (store) {
     return api.getBlogFriendsList()
       .then((data) => {
-        return Promise.resolve(data.data)
+        return Promise.resolve(data)
       })
       .catch((error) => {
         return Promise.reject(error)
@@ -157,7 +157,7 @@ const actions = {
   getBlogResume (store) {
     return api.getBlogResume()
       .then((data) => {
-        return Promise.resolve(data.data)
+        return Promise.resolve(data)
       })
       .catch((error) => {
         return Promise.reject(error)
@@ -169,7 +169,7 @@ const actions = {
   searchArticle (store, params) {
     return api.searchArticle(params)
       .then((data) => {
-        return Promise.resolve(data.data)
+        return Promise.resolve(data)
       })
       .catch((error) => {
         return Promise.reject(error)

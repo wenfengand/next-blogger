@@ -250,6 +250,29 @@ function commonArticleList(resolve1, reject1, params){
        
       }
     }
+    else if(params.hasOwnProperty('searchValue')){
+      var query1 = new AV.Query('Article')
+   
+      query1.contains('title', params.searchValue )
+
+      var query2 = new AV.Query('Article')
+    
+      query2.contains('sub_message', params.searchValue )
+
+      var query3 = new AV.Query('Article')
+  
+      query3.contains('content', params.searchValue )
+
+      var query = AV.Query.or(query1, query2, query3)
+      current_query = query 
+    
+      query.descending('update_time')
+      query.limit(params.pageSize) // 每页条数
+      query.skip(params.page  * params.pageSize) // 跳过页数
+
+      return query.find()
+    }
+    // search for published article
     else{
         var query = new AV.Query('Article')
         query.include('category')
@@ -778,7 +801,7 @@ export default {
         }
         article.tags = []
         var proArr = []
-        debugger;
+     
         params.tags.forEach( (tag, i, a) => {
         
           proArr.push(Promise.resolve(getItemById('Tag', tag.id)))
@@ -1178,13 +1201,19 @@ export default {
     return axios.get('w/getResume')
   },
   */
-  /**
-   * 按文章标题和简介搜索
+ 
+  // * 按文章标题和简介搜索
    
   searchArticle (params) {
-    return axios.get('w/article/search', {
-      params: params
+    /* in params we got :
+    searchValue: this.searchValue,
+    page: this.page,
+    pageSize : this.pageSize
+    */
+    params.isAdmin = false
+    return new Promise( (resolve1, reject1) => {
+      commonArticleList(resolve1, reject1, params)
     })
   }
-  */
+  
 }

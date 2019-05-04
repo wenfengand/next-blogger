@@ -103,7 +103,8 @@ export default {
           pageSize: this.pageSize
         })
         .then((data) => {
-          this.total = data.count
+      
+          this.total = data.total
           this.articleList = data.list
           this.loading = false
         })
