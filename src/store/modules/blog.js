@@ -91,7 +91,7 @@ const actions = {
   getBlogArticle (store, articleId) {
     return api.getBlogArticle(articleId)
       .then((data) => {
-        store.commit(SET_AUTHOR_INFO, data.author)
+        // store.commit(SET_AUTHOR_INFO, data.author)
         return Promise.resolve(data)
       })
       .catch((error) => {

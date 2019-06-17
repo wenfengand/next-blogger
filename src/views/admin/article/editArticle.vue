@@ -250,7 +250,7 @@ export default {
     $change(value, render){
      
       this.wordNum = this.getStrLength(value)
-      this.article.htmlContent = render 
+      this.article.html_content = render 
     },
     $imgAdd(pos, $file) {
       this.getQiniuToken(true)
@@ -309,7 +309,7 @@ export default {
         sub_message: this.article.sub_message,
         isEncrypt: this.isEncrypt ? '1' : '0',
         content: this.article.content,
-        htmlContent: this.article.htmlContent,
+        html_content: this.article.html_content,
         publish_time : this.article.publish_time,
         update_time : this.article.update_time
       }

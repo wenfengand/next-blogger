@@ -91,6 +91,50 @@ axios.interceptors.response.use(function (response) {
   return Promise.reject(error)
 })
 */
+function get(collection, known_dict, fetch_list, include_list, operation_dict){
+  return new Promise( (resolve, reject) => {
+    var query = new AV.Query(collection) 
+    for(var key in known_dict){
+        if(operation_dict.known == 'eq'){
+            query.equalTo(key, known_dict[key])
+        }
+        // others comparision is not implemented
+        
+    }
+    if(fetch_list != null){
+        query.select(fetch_list)
+    }
+    if(include_field != null){
+        query.include(include_list)
+    }
+
+    if(operation_dict.hasOwnProperty('count') && operation_dict.count==True){
+      query.count()
+      .then( (data) => {
+        resolve({count:data})
+      })
+    }else{
+      var new_data = []
+      query.find()
+      .then( (data) => {
+        data.forEach( (result, i, a) => {
+          for(var i=0;i<include_list.length; i++){
+            var include_field = result.get(include_list[i])
+            include_field.attributes['id'] = result.get(include_list[i]).id
+            result.include_list[i] = include_field
+          }
+          result.attributes['id'] = result.id
+          new_data.concat(result.attributes)
+        })
+        resolve(new_data)
+      })
+    }
+    
+    
+  })
+     
+
+  }
 function _checkCount(collection_name, field_name, target){
   return new Promise( (resolve, reject) => {
     var query = new AV.Query(collection_name) 
@@ -126,15 +170,15 @@ function getCommonArticle(resolve, reject, articleId){
         tags = tags.concat( result.attributes )
       })
       }
-      var author = data.get('author').attributes
-      author.id = data.get('author').id 
+      //var author = data.get('author').attributes
+      //author.id = data.get('author').id 
       
       
       var ret_data = {}
       ret_data.tags = tags 
       ret_data.article = article 
       ret_data.category = category
-      ret_data.author   = author 
+      //ret_data.author   = author 
 
       resolve(ret_data)
     })
@@ -825,6 +869,7 @@ export default {
       article.update_time  =  formatDate(params.update_time),
   
       article.html_content = params.htmlContent
+      article.static = true
       getValueById('Category', params.category.id, 'name')
       .then( (name) => {
         params.category.name = name
@@ -869,7 +914,7 @@ export default {
           
         }
         // set static to true 
-        save_article = AV.Object.createWithoutData('Article', params.id)
+        var save_article = AV.Object.createWithoutData('Article', params.id)
         save_article.set('static', true)
         save_article.save()
         resolve(axios({
@@ -960,104 +1005,9 @@ export default {
     })
      
   },
-  /**
-   * 获取友链列表
-   
-  getFriendsList (params) {
-    return axios.get('a/friends/list', {
-      params: params
-    })
-  },
-  */
-  /**
-   * 添加友链
-   
-  addFriend (params) {
-    return axios.post('a/friends/add', Qs.stringify(params))
-  },
-  */
-  /**
-   * 编辑友链
-   
-  modifyFriend (params) {
-    return axios.post('a/friends/modify', Qs.stringify(params))
-  },
-  */
-  /**
-   * 删除友链
   
-  deleteFriend (friendId) {
-    return axios.post('a/friends/delete', Qs.stringify({friendId: friendId}))
-  },
-   */
   /**
-   * 获取友链类型列表
-  
-  getFriendTypeList () {
-    return axios.get('a/friends/typeList')
-  },
-   */
-  /**
-   * 获取所有评论列表
-   */
-  /*
-  getAllCommentsList (params) {
-    return axios.get('a/comments/alllist', {
-      params: params
-    })
-  },
-  */
-  /**
-   * 获取文章评论列表
-   */
-  /*
-  getComments (articleId) {
-    return axios.get('a/comments/list', {
-      params: {
-        articleId: articleId
-      }
-    })
-  },
-  */
-  /**
-   * 添加评论
-   */
-  /*
-  adminReplyComments (params) {
-    return axios.post('a/comments/add', Qs.stringify(params))
-  },*/
-  /**
-   * 删除评论
-   */
-  /*
-  deleteComments (id) {
-    return axios.post('a/comments/delete', Qs.stringify({commentsId: id}))
-  },
-  */
-  /**
-   * 获取 我的简历 页面
-   
-  getResume () {
-    return axios.get('a/webConfig/getResume')
-  },
-  */
-  /**
-   * 修改 我的简历 页面
-  
-  modifyResume (params) {
-    return axios.post('a/webConfig/modifyResume', Qs.stringify(params))
-  },
-   */
-  // ---------------------------------------------以下是博客页面使用的接口---------------------------------------------,
-  /**
-   * 获取 关于我 页面
-   
-  getBlogAboutMe () {
-    return axios.get('w/getAbout')
-  },
-  */
-  /**
-   * 获取博客信息
+   * 获取网站信息
    */
   getSiteInfo () {
     return new Promise( (resolve, reject) => {
@@ -1074,20 +1024,13 @@ export default {
       commonArticleList(resolve1, reject1, params)
     })
   },
-  /**
-   * 获取文章归档列表
   
-  getBlogArticleArchives (params) {
-    return axios.get('w/article/archives', {
-      params: params
-    })
-  },
-   */
   /**
    * 获取文章信息
    */
   getBlogArticle (articleId) {
     return new Promise( (resolve, reject) => {
+      debugger
       getCommonArticle(resolve, reject, articleId)
     })
     

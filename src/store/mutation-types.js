@@ -24,3 +24,8 @@ export const SET_ARTICLE_MENU_SOURCE = 'SET_ARTICLE_MENU_SOURCE'
 export const SET_ARTICLE_MENU_TAG = 'SET_ARTICLE_MENU_TAG'
 // 保存评论填写的昵称邮箱信息
 export const SET_COMMENTS_INFO = 'SET_COMMENTS_INFO'
+// 保存当前用户的角色
+export const SET_USER_ROLE = 'SET_USER_ROLE'
+
+// 保存当前用户的角色
+export const IS_ROLE_SHOW = 'IS_ROLE_SHOW'

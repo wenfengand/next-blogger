@@ -2,6 +2,8 @@
 node_modules/
 package-lock.json
 /dist/
+/scripts 
+!/scripts/deploy2COS.py
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

@@ -114,7 +114,7 @@ export default {
       let id = this.$route.query.id
       if (id) {
         this.loading = true
-
+        debugger
         this.getBlogArticle(id)
           .then((data) => {
             console.log('in article view we got', data)

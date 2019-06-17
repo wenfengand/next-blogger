@@ -6,7 +6,7 @@
           我的简历
         </p>
       </div>
-      <md-preview :contents="htmlContent" />
+      <md-preview :contents="html_content" />
     </div>
   </div>
 </template>
@@ -25,7 +25,7 @@ export default {
   },
   data () {
     return {
-      htmlContent: '',
+      html_content: '',
       loading: false
     }
   },
@@ -33,7 +33,7 @@ export default {
     this.loading = true
     this.getBlogResume()
       .then((data) => {
-        this.htmlContent = data.html
+        this.html_content = data.html
         this.loading = false
       })
       .catch(()=> {

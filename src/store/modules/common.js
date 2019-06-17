@@ -6,7 +6,9 @@ import {
   SET_ARTICLE_MENU,
   SET_ARTICLE_MENU_SOURCE,
   SET_ARTICLE_MENU_TAG,
-  SET_COMMENTS_INFO
+  SET_COMMENTS_INFO,
+  SET_USER_ROLE,
+  IS_ROLE_SHOW
 } from '../mutation-types'
 
 import {
@@ -21,9 +23,10 @@ const state = {
   showRightNav: false,
   isAdminWrap: false,
   articleMenu: false,
+  isRoleShow: false,
   articleMenuSource: [],
   articleMenuTag: '1.',
-  commentsInfo: cachedCommentsInfo.load() || {}
+  commentsInfo: cachedCommentsInfo.load() || {},
 }
 
 const getters = {
@@ -32,6 +35,9 @@ const getters = {
   },
   showRightNav (state) {
     return state.showRightNav
+  },
+  isRoleShow(state){
+    return state.isRoleShow 
   },
   isAdminWrap (state) {
     return state.isAdminWrap
