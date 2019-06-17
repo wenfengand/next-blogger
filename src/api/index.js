@@ -868,7 +868,7 @@ export default {
       article.publish_time =  formatDate(params.publish_time),
       article.update_time  =  formatDate(params.update_time),
   
-      article.html_content = params.htmlContent
+      article.html_content = params.html_content
       article.static = true
       getValueById('Category', params.category.id, 'name')
       .then( (name) => {
