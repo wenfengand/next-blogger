@@ -23,7 +23,8 @@ var APP_KEY = appkey;
 
 AV.init({
   appId: APP_ID,
-  appKey: APP_KEY
+  appKey: APP_KEY,
+  serverURLs: 'https://avoscloud.com',
 });
 /* eslint-disable */
 const API_ROOT = 'http://blogapi.codebear.cn/index.php'
@@ -404,7 +405,7 @@ function articleSave(resolve, reject, params){
     article.set('sub_message', params.sub_message)
     article.set('cover', params.cover)
     article.set('content', params.content)
-    article.set('html_content', params.htmlContent)
+    article.set('html_content', params.html_content)
     article.set('update_time', new Date())
     article.set('status', params.status)
     article.set('isEncrypt', params.isEncrypt)
