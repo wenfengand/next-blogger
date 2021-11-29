@@ -19,7 +19,7 @@
     "highlight.js": "^9.12.0",
     "leancloud-storage": "^3.12.0",
     "marked": "^0.4.0",
-    "mavon-editor": "^2.6.15",
+    "mavon-editor": "^2.8.2",
     "moment": "^2.22.1",
     "normalize.css": "^8.0.0",
     "nprogress": "^0.2.0",
